@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import LinkRow from "../components/LinkRow";
 import Wrapper from "../components/Wrapper";
@@ -6,7 +7,6 @@ import Button from "../components/Button";
 import Brand from "../components/Brand";
 import Center from "../components/Center";
 import Line from "../components/Line";
-import { Link } from "react-router-dom";
 import ModalWindow from "./ModalWindow";
 import Context from "../components/Context"
 

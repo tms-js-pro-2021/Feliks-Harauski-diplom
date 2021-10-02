@@ -33,6 +33,7 @@ export default function Products() {
           )
           .map((item, i) => (
             <ProductCard
+              // eslint-disable-next-line react/no-array-index-key
               key={i}
               {...item}
               loading={productsContext.isLoading}

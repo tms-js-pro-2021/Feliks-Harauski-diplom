@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import Icons from "../img/MinHeaderIcon";
 import ContentLoader from "react-content-loader";
+import Icons from "../img/MinHeaderIcon";
 
 const ProductCardStyle = styled.div`
   padding: 35px;
@@ -116,7 +116,7 @@ export default function ProductCard({ src, producer, label, price, loading, onCa
           <ProductCardImage>
             <img src={src} alt={label} />
             <div>
-              <button onClick={addToLiked} href="/">
+              <button type="button" onClick={addToLiked} href="/">
                 <Icons
                   name="LikedAdd"
                   width="35"
@@ -124,7 +124,7 @@ export default function ProductCard({ src, producer, label, price, loading, onCa
                   color={isLiked ? "red" : "white"}
                 />
               </button>
-              <button onClick={addToCart} href="/">
+              <button type="button" onClick={addToCart} href="/">
                 <Icons
                   name="CartAdd"
                   width="35"

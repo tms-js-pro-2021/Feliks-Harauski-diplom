@@ -13,5 +13,6 @@ const ButtonStyle = styled.button`
 `;
 
 export default function Button({ ...props }) {
-  return <ButtonStyle type="button" {...props}></ButtonStyle>;
+  return <ButtonStyle type="button" {...props}/>;
+  // </ButtonStyle>
 }

@@ -1,9 +1,9 @@
 import React from "react";
-import LinkCard from "../components/LinkCard";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+import LinkCard from "../components/LinkCard";
 import SectionTitle from "../components/SectionTitle";
 import Wrapper from "../components/Wrapper";
-import { Link } from "react-router-dom";
 import Context from "../components/Context";
 
 
@@ -40,6 +40,7 @@ const goodsTypeContext = React.useContext(Context)
 
       <LinkField>
         {ProductTypeCardItem.map((item, i) => (
+          // eslint-disable-next-line react/no-array-index-key
           <Link key={i} to="/products">
             <LinkCard onClick={()=>goodsTypeContext.quickSearch(item.search)} src={item.src} label={item.label} />
           </Link>

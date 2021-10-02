@@ -32,8 +32,8 @@ export default function OurSocial() {
         <SectionTitle subtitle="#ojjo_jewerly" title="Мы в социальных сетях" />
 
       <OurSocialImg>
-        <video autoPlay={true} loop muted>
-          <source src="/images/videoplayback.mp4" type="video/mp4"></source>
+        <video autoPlay loop muted>
+          <source src="/images/videoplayback.mp4" type="video/mp4" />
         </video>
         <img src="/images/Social_1.png" alt="" />
         <img src="/images/Social_2.png" alt="" />
@@ -43,8 +43,8 @@ export default function OurSocial() {
 
         <img src="/images/Social_3.png" alt="" />
         <img src="/images/Social_4.png" alt="" />
-        <video autoPlay={true} loop muted>
-          <source src="/images/videoplayback_2.mp4" type="video/mp4"></source>
+        <video autoPlay loop muted>
+          <source src="/images/videoplayback_2.mp4" type="video/mp4" />
         </video>
       </OurSocialImg>
     </OurSocialContainer>

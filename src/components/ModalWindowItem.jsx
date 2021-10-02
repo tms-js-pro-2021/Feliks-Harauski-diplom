@@ -71,7 +71,6 @@ export default function ModalWindowItem({
   price,
   liked,
   removeItem,
-  id,
 }) {
   const [quantity, setQuantity] = React.useState(1);
 
@@ -97,17 +96,17 @@ export default function ModalWindowItem({
       </div>
       {liked && (
         <ItemsControl>
-          <button onClick={decreaseQuantity}>
+          <button type="button" onClick={decreaseQuantity}>
             <Icons name="Minus" width="16" height="16" color="#333333" />
           </button>
           <input value={quantity} onChange={inputHandleChange} type="text" />
-          <button onClick={increaseQuantity}>
+          <button type="button" onClick={increaseQuantity}>
             <Icons name="Pluse" width="16" height="16" color="#333333" />
           </button>
         </ItemsControl>
       )}
       <span>{price} ₽</span>
-      <button onClick={removeItem}>
+      <button type="button" onClick={removeItem}>
         <Icons
           name={liked ? "Unliked" : "Delete"}
           width="18"

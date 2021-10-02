@@ -65,6 +65,8 @@ const LinkLike = styled(Links)`
 `;
 
 export default function LinkRow({ ...props }) {
+  const linkRowContext = React.useContext(Context)
+
   const [searchWindow, setSearchWindow] = React.useState(false);
 
   const searchWindowOpen = () => {
@@ -76,8 +78,6 @@ export default function LinkRow({ ...props }) {
     setSearchWindow(false);
     linkRowContext.clearInput();
   };
-
-  const linkRowContext = React.useContext(Context)
 
   return (
     <HeaderLinks>
@@ -97,7 +97,7 @@ export default function LinkRow({ ...props }) {
             <div>
               <Icons name="Search" width="18" height="18" color="#333333" />
               <input onChange={linkRowContext.changingInput} type="text" />
-              <button onClick={searchWindowClose}>
+              <button type="button" onClick={searchWindowClose}>
                 <Icons name="Delete" width="18" height="18" color="#333333" />
               </button>
             </div>

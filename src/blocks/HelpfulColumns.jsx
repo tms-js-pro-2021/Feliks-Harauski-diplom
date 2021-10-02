@@ -40,6 +40,7 @@ export default function HelpfulColumns() {
 
       <LinkField>
         {ColumnsItem.map((item, i) => (
+          // eslint-disable-next-line react/no-array-index-key
           <LinkCard big key={i} src={item.src} label={item.label} />
         ))}
       </LinkField>

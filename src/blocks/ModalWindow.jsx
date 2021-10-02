@@ -133,13 +133,13 @@ export default function ModalWindow({ ...props }) {
       <Container>
         <Purchase>
           {props.liked ? (
-            <button onClick={props.closedLiked}>
+            <button type="button" onClick={props.closedLiked}>
               <Icons name="Delete" width="30" height="30" color="#333333" />
             </button>
           ) : null}
           <h5>{props.liked ? "Вам понравилось" : "Ваши покупки"}</h5>
           <Head>
-            <button
+            <button type="button"
               onClick={
                 props.liked
                   ? modalWindowContext.clearLiked
@@ -162,6 +162,7 @@ export default function ModalWindow({ ...props }) {
                   liked
                   removeItem={() => modalWindowContext.removeLikedItem(obj.id)}
                   {...obj}
+                  // eslint-disable-next-line react/no-array-index-key
                   key={i}
                 />
               ))
@@ -169,6 +170,7 @@ export default function ModalWindow({ ...props }) {
                 <ModalWindowItem
                   removeItem={() => modalWindowContext.removeCartItem(obj.id)}
                   {...obj}
+                  // eslint-disable-next-line react/no-array-index-key
                   key={i}
                 />
               ))}
@@ -177,7 +179,7 @@ export default function ModalWindow({ ...props }) {
         {!props.liked ? (
           <OrderDetails>
             <div>
-              <button onClick={props.closedCart}>
+              <button type="button" onClick={props.closedCart}>
                 <Icons name="Delete" width="30" height="30" color="#FFFFFF" />
               </button>
               <h5>Детали заказа</h5>

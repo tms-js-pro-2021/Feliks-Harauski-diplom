@@ -1,6 +1,6 @@
 import axios from "axios";
 import React from "react";
-import { Route, Switch } from "react-router";
+import { Route, Switch } from "react-router-dom";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import Context from "./components/Context";
 import PageGoods from "./pages/PageGoods";
@@ -52,7 +52,7 @@ p{
 	}
 `;
 
-function App() {
+export default function App() {
 	const [items, setItems] = React.useState([]);
   const [cartItems, setCartItems] = React.useState([]);
   const [likedItems, setLikedItems] = React.useState([]);
@@ -76,6 +76,7 @@ function App() {
         setLikedItems(likedResponse.data)
         setIsLoading(false);
       } catch {
+        // eslint-disable-next-line no-alert
         alert("Ошибка сервера");
       }
     }
@@ -154,6 +155,6 @@ function App() {
   );
 }
 
-export default App;
+
 
 
