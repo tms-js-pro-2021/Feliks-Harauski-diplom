@@ -1,10 +1,10 @@
-import axios from "axios";
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-import { createGlobalStyle, ThemeProvider } from "styled-components";
-import Context from "./components/Context";
-import PageGoods from "./pages/PageGoods";
-import PageMain from "./pages/PageMain";
+import axios from 'axios';
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import Context from './components/Context';
+import PageGoods from './pages/PageGoods';
+import PageMain from './pages/PageMain';
 
 const GlobalStyle = createGlobalStyle`
 html {
@@ -53,76 +53,100 @@ p{
 `;
 
 export default function App() {
-	const [items, setItems] = React.useState([]);
+  const [items, setItems] = React.useState([]);
   const [cartItems, setCartItems] = React.useState([]);
   const [likedItems, setLikedItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [search, setSearch]=React.useState('');
+  const [search, setSearch] = React.useState('');
+
+  console.log(cartItems);
+  console.log(likedItems);
 
   React.useEffect(() => {
     async function fetchData() {
       try {
         const itemResponse = await axios.get(
-          "https://61451ca338339400175fc52d.mockapi.io/items"
+          'https://61451ca338339400175fc52d.mockapi.io/items'
         );
         const cartResponse = await axios.get(
-          "https://61451ca338339400175fc52d.mockapi.io/cart"
+          'https://61451ca338339400175fc52d.mockapi.io/items/1/cart'
         );
         const likedResponse = await axios.get(
-          "https://61451ca338339400175fc52d.mockapi.io/liked"
+          'https://61451ca338339400175fc52d.mockapi.io/items/1/liked'
         );
         setItems(itemResponse.data);
-        setCartItems(cartResponse.data)
-        setLikedItems(likedResponse.data)
+        setCartItems(cartResponse.data);
+        setLikedItems(likedResponse.data);
         setIsLoading(false);
       } catch {
         // eslint-disable-next-line no-alert
-        alert("Ошибка сервера");
+        alert('Ошибка сервера');
       }
     }
     fetchData();
   }, []);
 
-  const toCartItems = (item) => {
-    axios.post("https://61451ca338339400175fc52d.mockapi.io/cart", item);
-    setCartItems((prev) => [...prev, item]);
-  };
-  const removeCartItem = (id) => {
-    axios.delete(`https://61451ca338339400175fc52d.mockapi.io/cart/${id}`);
-    setCartItems((prev) => prev.filter(item => item.id !== id));
-  }
+  const reverseCartItems = item => {
+    if(cartItems.find((obj) => obj.id === item.id)){
+      axios.delete(`https://61451ca338339400175fc52d.mockapi.io/items/1/cart/${item.id}`);
+      setCartItems(prev => prev.filter(obj => obj.id !== item.id));
+    } else{
+      axios.post('https://61451ca338339400175fc52d.mockapi.io/items/1/cart', item);
+      setCartItems(prev => [...prev, item]);
+    }
+ };
+  const reverseLikedItems = item => {
+    if(likedItems.find((obj) => obj.id === item.id)){
+      axios.delete(`https://61451ca338339400175fc52d.mockapi.io/items/1/liked/${item.id}`);
+      setLikedItems(prev => prev.filter(obj => obj.id !== item.id));
+    } else{
+      axios.post('https://61451ca338339400175fc52d.mockapi.io/items/1/liked', item);
+      setLikedItems(prev => [...prev, item]);
+    }
+ };
 
-  const toLikedItems = (item) => {
-    axios.post("https://61451ca338339400175fc52d.mockapi.io/liked", item);
-    setLikedItems((prev) => [...prev, item]);
-  };
-  const removeLikedItem = (id) => {
-    axios.delete(`https://61451ca338339400175fc52d.mockapi.io/liked/${id}`);
-    setLikedItems((prev) => prev.filter(item => item.id !== id));
-  }
+
+
+
 
   const clearLiked = () => {
     setLikedItems([]);
+    for (let i = 0; i < likedItems.length; i+=1) {
+      setTimeout(() => {
+        const item = likedItems[i];
+        axios.delete(
+          `https://61451ca338339400175fc52d.mockapi.io/liked/${item.id}`
+        );
+      }, i * 1000);
+    }
   };
 
   const clearCart = () => {
     setCartItems([]);
+    for (let i = 0; i < cartItems.length; i+=1) {
+      setTimeout(() => {
+        const item = cartItems[i];
+        axios.delete(
+          `https://61451ca338339400175fc52d.mockapi.io/cart/${item.id}`
+        );
+      }, i * 1000);
+    }
   };
 
-  const changingInput = (event) => {
-      setSearch(event.target.value);
-  }
+  const changingInput = event => {
+    setSearch(event.target.value);
+  };
 
   const clearInput = () => {
     setSearch('');
-  }
+  };
 
-  const quickSearch = (any) => {
-    setSearch(any)
-  }
+  const quickSearch = any => {
+    setSearch(any);
+  };
 
   return (
-    <ThemeProvider theme={{ fontFamily: "sans-serif" }}>
+    <ThemeProvider theme={{ fontFamily: 'sans-serif' }}>
       <GlobalStyle />
       <Switch>
         <Context.Provider
@@ -132,10 +156,10 @@ export default function App() {
             cartItems,
             likedItems,
             search,
-            toCartItems,
-            removeCartItem,
-            toLikedItems,
-            removeLikedItem,
+            reverseCartItems,
+            
+            reverseLikedItems,
+           
             clearLiked,
             clearCart,
             changingInput,
@@ -154,7 +178,3 @@ export default function App() {
     </ThemeProvider>
   );
 }
-
-
-
-

@@ -160,7 +160,7 @@ export default function ModalWindow({ ...props }) {
             ? modalWindowContext.likedItems.map((obj, i) => (
                 <ModalWindowItem
                   liked
-                  removeItem={() => modalWindowContext.removeLikedItem(obj.id)}
+                  removeItem={() => modalWindowContext.reverseLikedItems(obj)}
                   {...obj}
                   // eslint-disable-next-line react/no-array-index-key
                   key={i}
@@ -168,7 +168,7 @@ export default function ModalWindow({ ...props }) {
               ))
             : modalWindowContext.cartItems.map((obj, i) => (
                 <ModalWindowItem
-                  removeItem={() => modalWindowContext.removeCartItem(obj.id)}
+                  removeItem={() => modalWindowContext.reverseCartItems(obj)}
                   {...obj}
                   // eslint-disable-next-line react/no-array-index-key
                   key={i}

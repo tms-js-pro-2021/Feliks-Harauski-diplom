@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import ProductCard from "../components/ProductCard";
-import Wrapper from "../components/Wrapper";
-import Context from "../components/Context";
+import React from 'react';
+import styled from 'styled-components';
+import ProductCard from '../components/ProductCard';
+import Wrapper from '../components/Wrapper';
+import Context from '../components/Context';
 
 const ProductsContainer = styled(Wrapper)`
   padding: 100px 0 150px 0;
@@ -23,7 +23,7 @@ export default function Products() {
       <ProductCardContainer>
         {productsContext.items
           .filter(
-            (item) =>
+            item =>
               item.producer
                 .toLowerCase()
                 .includes(productsContext.search.toLowerCase()) ||
@@ -37,8 +37,8 @@ export default function Products() {
               key={i}
               {...item}
               loading={productsContext.isLoading}
-              onLiked={() => productsContext.toLikedItems(item)}
-              onCart={() => productsContext.toCartItems(item)}
+              onLiked={() => productsContext.reverseLikedItems(item)}
+              onCart={() => productsContext.reverseCartItems(item)}
             />
           ))}
       </ProductCardContainer>
