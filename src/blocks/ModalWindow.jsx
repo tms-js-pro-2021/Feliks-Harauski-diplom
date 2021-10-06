@@ -157,10 +157,10 @@ export default function ModalWindow({ ...props }) {
           </Head>
 
           {props.liked
-            ? modalWindowContext.likedItems.map((obj, i) => (
+            ? modalWindowContext.favoriteItems.map((obj, i) => (
                 <ModalWindowItem
                   liked
-                  removeItem={() => modalWindowContext.reverseLikedItems(obj)}
+                  removeItem={() => modalWindowContext.reverseFavoriteItems(obj)}
                   {...obj}
                   // eslint-disable-next-line react/no-array-index-key
                   key={i}
@@ -187,7 +187,7 @@ export default function ModalWindow({ ...props }) {
             <div>
               <input type="text" placeholder="Введите промокод" />
               <span>Итого:</span>
-              <p>175 000 ₽</p>
+              <p>{modalWindowContext.price} ₽</p>
               <Button>заказать</Button>
             </div>
           </OrderDetails>

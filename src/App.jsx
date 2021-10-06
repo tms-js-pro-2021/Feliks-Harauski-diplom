@@ -55,12 +55,10 @@ p{
 export default function App() {
   const [items, setItems] = React.useState([]);
   const [cartItems, setCartItems] = React.useState([]);
-  const [likedItems, setLikedItems] = React.useState([]);
+  const [favoriteItems, setFavoriteItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [search, setSearch] = React.useState('');
-
-  console.log(cartItems);
-  console.log(likedItems);
+  const [price, setPrice] = React.useState(0);
 
   React.useEffect(() => {
     async function fetchData() {
@@ -68,15 +66,9 @@ export default function App() {
         const itemResponse = await axios.get(
           'https://61451ca338339400175fc52d.mockapi.io/items'
         );
-        const cartResponse = await axios.get(
-          'https://61451ca338339400175fc52d.mockapi.io/items/1/cart'
-        );
-        const likedResponse = await axios.get(
-          'https://61451ca338339400175fc52d.mockapi.io/items/1/liked'
-        );
         setItems(itemResponse.data);
-        setCartItems(cartResponse.data);
-        setLikedItems(likedResponse.data);
+        setCartItems(itemResponse.data.filter(obj => obj.inCart));
+        setFavoriteItems(itemResponse.data.filter(obj => obj.favorite));
         setIsLoading(false);
       } catch {
         // eslint-disable-next-line no-alert
@@ -87,35 +79,66 @@ export default function App() {
   }, []);
 
   const reverseCartItems = item => {
-    if(cartItems.find((obj) => obj.id === item.id)){
-      axios.delete(`https://61451ca338339400175fc52d.mockapi.io/items/1/cart/${item.id}`);
+    if (cartItems.find(obj => obj.id === item.id)) {
+      axios.put(
+        `https://61451ca338339400175fc52d.mockapi.io/items/${item.id}`,
+        { inCart: false }
+      );
       setCartItems(prev => prev.filter(obj => obj.id !== item.id));
-    } else{
-      axios.post('https://61451ca338339400175fc52d.mockapi.io/items/1/cart', item);
+      setItems(prev =>
+        prev.map(obj => (obj.id === item.id ? { ...obj, inCart: false } : obj))
+      );
+      setPrice(prev => prev - Number(item.price));
+    } else {
+      axios.put(
+        `https://61451ca338339400175fc52d.mockapi.io/items/${item.id}`,
+        { inCart: true }
+      );
       setCartItems(prev => [...prev, item]);
+      setItems(prev =>
+        prev.map(obj => (obj.id === item.id ? { ...obj, inCart: true } : obj))
+      );
+      setPrice(prev => prev + Number(item.price));
     }
- };
-  const reverseLikedItems = item => {
-    if(likedItems.find((obj) => obj.id === item.id)){
-      axios.delete(`https://61451ca338339400175fc52d.mockapi.io/items/1/liked/${item.id}`);
-      setLikedItems(prev => prev.filter(obj => obj.id !== item.id));
-    } else{
-      axios.post('https://61451ca338339400175fc52d.mockapi.io/items/1/liked', item);
-      setLikedItems(prev => [...prev, item]);
+  };
+
+  const reverseFavoriteItems = item => {
+    if (favoriteItems.find(obj => obj.id === item.id)) {
+      axios.put(
+        `https://61451ca338339400175fc52d.mockapi.io/items/${item.id}`,
+        { favorite: false }
+      );
+      setFavoriteItems(prev => prev.filter(obj => obj.id !== item.id));
+      setItems(prev =>
+        prev.map(obj =>
+          obj.id === item.id ? { ...obj, favorite: false } : obj
+        )
+      );
+    } else {
+      axios.put(
+        `https://61451ca338339400175fc52d.mockapi.io/items/${item.id}`,
+        { favorite: true }
+      );
+      setFavoriteItems(prev => [...prev, item]);
+      setItems(prev =>
+        prev.map(obj => (obj.id === item.id ? { ...obj, favorite: true } : obj))
+      );
     }
- };
-
-
-
-
+  };
 
   const clearLiked = () => {
-    setLikedItems([]);
-    for (let i = 0; i < likedItems.length; i+=1) {
+    setFavoriteItems([]);
+    setItems(prev =>
+      prev.map(obj =>
+        obj.favorite === true ? { ...obj, favorite: false } : obj
+      )
+    );
+    for (let i = 0; i < favoriteItems.length; i += 1) {
       setTimeout(() => {
-        const item = likedItems[i];
-        axios.delete(
-          `https://61451ca338339400175fc52d.mockapi.io/liked/${item.id}`
+        const item = favoriteItems[i];
+        axios.put(
+          `https://61451ca338339400175fc52d.mockapi.io/items/${item.id}`,
+          { favorite: false }
         );
       }, i * 1000);
     }
@@ -123,11 +146,15 @@ export default function App() {
 
   const clearCart = () => {
     setCartItems([]);
-    for (let i = 0; i < cartItems.length; i+=1) {
+    setItems(prev =>
+      prev.map(obj => (obj.inCart === true ? { ...obj, inCart: false } : obj))
+    );
+    for (let i = 0; i < cartItems.length; i += 1) {
       setTimeout(() => {
         const item = cartItems[i];
-        axios.delete(
-          `https://61451ca338339400175fc52d.mockapi.io/cart/${item.id}`
+        axios.put(
+          `https://61451ca338339400175fc52d.mockapi.io/items/${item.id}`,
+          { inCart: false }
         );
       }, i * 1000);
     }
@@ -154,12 +181,11 @@ export default function App() {
             items,
             isLoading,
             cartItems,
-            likedItems,
+            favoriteItems,
             search,
+            price,
             reverseCartItems,
-            
-            reverseLikedItems,
-           
+            reverseFavoriteItems,
             clearLiked,
             clearCart,
             changingInput,

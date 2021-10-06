@@ -37,7 +37,7 @@ export default function Products() {
               key={i}
               {...item}
               loading={productsContext.isLoading}
-              onLiked={() => productsContext.reverseLikedItems(item)}
+              onLiked={() => productsContext.reverseFavoriteItems(item)}
               onCart={() => productsContext.reverseCartItems(item)}
             />
           ))}

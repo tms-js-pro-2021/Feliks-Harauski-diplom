@@ -80,20 +80,20 @@ const ProductCardImage = styled.div`
   }
 `;
 
-export default function ProductCard({ src, producer, label, price, loading, onCart, onLiked }) {
-  const [isAdded, setIsAdded] = React.useState(false);
-  const [isLiked, setIsLiked] = React.useState(false);
+export default function ProductCard({ src, producer, label, price, loading, inCart, favorite, onCart, onLiked }) {
+  // const [isAdded, setIsAdded] = React.useState(false);
+  // const [isLiked, setIsLiked] = React.useState(false);
+  // console.log(isAdded);
   
-  
-  const addToCart = () => {
-    setIsAdded(!isAdded);
-    onCart();
-  };
+  // const addToCart = () => {
+  //   setIsAdded(!isAdded);
+  //   onCart();
+  // };
 
-  const addToLiked = () => {
-    setIsLiked(!isLiked);
-    onLiked();
-  };
+  // const addToLiked = () => {
+  //   setIsLiked(!isLiked);
+  //   onLiked();
+  // };
 
   return (
     <>
@@ -116,20 +116,20 @@ export default function ProductCard({ src, producer, label, price, loading, onCa
           <ProductCardImage>
             <img src={src} alt={label} />
             <div>
-              <button type="button" onClick={addToLiked} href="/">
+              <button type="button" onClick={onLiked} href="/">
                 <Icons
                   name="LikedAdd"
                   width="35"
                   height="35"
-                  color={isLiked ? "red" : "white"}
+                  color={favorite ? "red" : "white"}
                 />
               </button>
-              <button type="button" onClick={addToCart} href="/">
+              <button type="button" onClick={onCart} href="/">
                 <Icons
                   name="CartAdd"
                   width="35"
                   height="35"
-                  color={isAdded ? "green" : "white"}
+                  color={inCart ? "green" : "white"}
                 />
               </button>
             </div>

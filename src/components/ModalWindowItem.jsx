@@ -72,6 +72,7 @@ export default function ModalWindowItem({
   liked,
   removeItem,
 }) {
+  console.log(liked);
   const [quantity, setQuantity] = React.useState(1);
 
   const increaseQuantity = () => {
@@ -94,7 +95,7 @@ export default function ModalWindowItem({
         <p>{producer}</p>
         <span>{label}</span>
       </div>
-      {liked && (
+      {!liked && (
         <ItemsControl>
           <button type="button" onClick={decreaseQuantity}>
             <Icons name="Minus" width="16" height="16" color="#333333" />
