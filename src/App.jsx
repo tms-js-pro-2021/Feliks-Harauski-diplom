@@ -56,9 +56,9 @@ export default function App() {
   const [items, setItems] = React.useState([]);
   const [cartItems, setCartItems] = React.useState([]);
   const [favoriteItems, setFavoriteItems] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+  // const [isLoading, setIsLoading] = React.useState(true);
   const [search, setSearch] = React.useState('');
-  const [price, setPrice] = React.useState(0);
+  // const [price, setPrice] = React.useState(0);
 
   React.useEffect(() => {
     async function fetchData() {
@@ -67,97 +67,57 @@ export default function App() {
           'https://61451ca338339400175fc52d.mockapi.io/items'
         );
         setItems(itemResponse.data);
-        setCartItems(itemResponse.data.filter(obj => obj.inCart));
-        setFavoriteItems(itemResponse.data.filter(obj => obj.favorite));
-        setIsLoading(false);
+        // setIsLoading(false);
       } catch {
         // eslint-disable-next-line no-alert
         alert('Ошибка сервера');
       }
     }
     fetchData();
+    setCartItems(JSON.parse(window.localStorage.getItem('cartItems') || []));
+    setFavoriteItems(
+      JSON.parse(window.localStorage.getItem('favoriteItems') || [])
+    );
+
+
+console.log(JSON.parse(window.localStorage.getItem('favoriteItems')));
+
   }, []);
+
+  React.useEffect(() => {
+    window.localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  React.useEffect(() => {
+    window.localStorage.setItem('favoriteItems', JSON.stringify(favoriteItems));
+  }, [favoriteItems]);
 
   const reverseCartItems = item => {
     if (cartItems.find(obj => obj.id === item.id)) {
-      axios.put(
-        `https://61451ca338339400175fc52d.mockapi.io/items/${item.id}`,
-        { inCart: false }
-      );
       setCartItems(prev => prev.filter(obj => obj.id !== item.id));
-      setItems(prev =>
-        prev.map(obj => (obj.id === item.id ? { ...obj, inCart: false } : obj))
-      );
-      setPrice(prev => prev - Number(item.price));
+
+      // setPrice(prev => prev - Number(item.price));
     } else {
-      axios.put(
-        `https://61451ca338339400175fc52d.mockapi.io/items/${item.id}`,
-        { inCart: true }
-      );
       setCartItems(prev => [...prev, item]);
-      setItems(prev =>
-        prev.map(obj => (obj.id === item.id ? { ...obj, inCart: true } : obj))
-      );
-      setPrice(prev => prev + Number(item.price));
+
+      // setPrice(prev => prev + Number(item.price));
     }
   };
 
   const reverseFavoriteItems = item => {
     if (favoriteItems.find(obj => obj.id === item.id)) {
-      axios.put(
-        `https://61451ca338339400175fc52d.mockapi.io/items/${item.id}`,
-        { favorite: false }
-      );
       setFavoriteItems(prev => prev.filter(obj => obj.id !== item.id));
-      setItems(prev =>
-        prev.map(obj =>
-          obj.id === item.id ? { ...obj, favorite: false } : obj
-        )
-      );
     } else {
-      axios.put(
-        `https://61451ca338339400175fc52d.mockapi.io/items/${item.id}`,
-        { favorite: true }
-      );
       setFavoriteItems(prev => [...prev, item]);
-      setItems(prev =>
-        prev.map(obj => (obj.id === item.id ? { ...obj, favorite: true } : obj))
-      );
     }
   };
 
   const clearLiked = () => {
     setFavoriteItems([]);
-    setItems(prev =>
-      prev.map(obj =>
-        obj.favorite === true ? { ...obj, favorite: false } : obj
-      )
-    );
-    for (let i = 0; i < favoriteItems.length; i += 1) {
-      setTimeout(() => {
-        const item = favoriteItems[i];
-        axios.put(
-          `https://61451ca338339400175fc52d.mockapi.io/items/${item.id}`,
-          { favorite: false }
-        );
-      }, i * 1000);
-    }
   };
 
   const clearCart = () => {
     setCartItems([]);
-    setItems(prev =>
-      prev.map(obj => (obj.inCart === true ? { ...obj, inCart: false } : obj))
-    );
-    for (let i = 0; i < cartItems.length; i += 1) {
-      setTimeout(() => {
-        const item = cartItems[i];
-        axios.put(
-          `https://61451ca338339400175fc52d.mockapi.io/items/${item.id}`,
-          { inCart: false }
-        );
-      }, i * 1000);
-    }
   };
 
   const changingInput = event => {
@@ -179,11 +139,11 @@ export default function App() {
         <Context.Provider
           value={{
             items,
-            isLoading,
+            // isLoading,
             cartItems,
             favoriteItems,
             search,
-            price,
+            // price,
             reverseCartItems,
             reverseFavoriteItems,
             clearLiked,

@@ -80,21 +80,7 @@ const ProductCardImage = styled.div`
   }
 `;
 
-export default function ProductCard({ src, producer, label, price, loading, inCart, favorite, onCart, onLiked }) {
-  // const [isAdded, setIsAdded] = React.useState(false);
-  // const [isLiked, setIsLiked] = React.useState(false);
-  // console.log(isAdded);
-  
-  // const addToCart = () => {
-  //   setIsAdded(!isAdded);
-  //   onCart();
-  // };
-
-  // const addToLiked = () => {
-  //   setIsLiked(!isLiked);
-  //   onLiked();
-  // };
-
+export default function ProductCard({ src, producer, label, price, loading, inCart, inFavorite, onCart, onLiked }) {
   return (
     <>
       {loading ? (
@@ -121,7 +107,7 @@ export default function ProductCard({ src, producer, label, price, loading, inCa
                   name="LikedAdd"
                   width="35"
                   height="35"
-                  color={favorite ? "red" : "white"}
+                  color={inFavorite ? "red" : "white"}
                 />
               </button>
               <button type="button" onClick={onCart} href="/">

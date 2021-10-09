@@ -18,6 +18,7 @@ const ProductCardContainer = styled.div`
 export default function Products() {
   const productsContext = React.useContext(Context);
 
+
   return (
     <ProductsContainer>
       <ProductCardContainer>
@@ -37,6 +38,8 @@ export default function Products() {
               key={i}
               {...item}
               loading={productsContext.isLoading}
+              inFavorite = {productsContext.favoriteItems.find((obj)=> obj.id === item.id )}
+              inCart = {productsContext.cartItems.find((obj)=> obj.id === item.id )}
               onLiked={() => productsContext.reverseFavoriteItems(item)}
               onCart={() => productsContext.reverseCartItems(item)}
             />
