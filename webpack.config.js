@@ -13,6 +13,7 @@ module.exports = {
     port: 3000,
     watchContentBase: true,
   },
+  sourcemaps: 'inline',
   // Rules of how webpack will take our files, complie & bundle them for the browser
   module: {
     rules: [

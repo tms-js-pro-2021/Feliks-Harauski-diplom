@@ -79,12 +79,25 @@ export default function LinkRow({ ...props }) {
     linkRowContext.clearInput();
   };
 
+  const logout = () => {
+    window.sessionStorage.token = '';
+    window.sessionStorage.tokenExpires = '';
+    window.location.reload();
+  }
+  
+
   return (
     <HeaderLinks>
       <LeftLink>
-        <Links href="/">Контрагентам</Links>
-        <Links href="/">Дизайнерам</Links>
-        <Links href="/">Вакансии</Links>
+        <Links href="#">Контрагентам</Links>
+        <Links
+        href="#">Дизайнерам</Links>
+        {linkRowContext.loginStatus ? 
+        <Links onClick={props.openAddingCard} href="#">ADD</Links>
+      :
+      <Links href="#">Вакансии</Links>
+      
+      }
       </LeftLink>
       <Link name="logo" to="/">
         <Icons name="OJJO" width="216" height="54" color="white" />
@@ -103,10 +116,23 @@ export default function LinkRow({ ...props }) {
             </div>
           )}
         </LinkSearch>
-        <LinkEnter href="/">
+          {linkRowContext.loginStatus ? 
+          <LinkEnter onClick={logout} href="#">
+          <span>Выход</span>
+          <Icons name="Account" width="16" height="16" color="white" />
+        </LinkEnter>
+          
+          :
+          
+          <LinkEnter onClick={props.openLogin} href="#">
           <span>Вход/Регистрация</span>
           <Icons name="Account" width="16" height="16" color="white" />
         </LinkEnter>
+          }
+
+
+
+
         <LinkLike onClick={props.openLiked} href="#">
           <Icons name="Liked" width="16" height="16" color="white" />
         </LinkLike>

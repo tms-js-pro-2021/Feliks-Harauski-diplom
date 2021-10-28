@@ -1,7 +1,8 @@
-import axios from 'axios';
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { setupApi } from './api/api';
+import ModalWindow from './blocks/ModalWindow';
 import Context from './components/Context';
 import PageGoods from './pages/PageGoods';
 import PageMain from './pages/PageMain';
@@ -23,8 +24,10 @@ body {
 input[type="text"],
 input[type="phone"],
 input[type="email"],
+input[type="password"],
 textarea {
 	appearance: none;
+  outline: none;
 }
 
 textarea:focus {
@@ -53,64 +56,38 @@ p{
 `;
 
 export default function App() {
-  const [items, setItems] = React.useState([]);
-  const [cartItems, setCartItems] = React.useState([]);
-  const [favoriteItems, setFavoriteItems] = React.useState([]);
+
+  const {pathname } = useLocation();
+  
   // const [isLoading, setIsLoading] = React.useState(true);
   const [search, setSearch] = React.useState('');
   // const [price, setPrice] = React.useState(0);
+  const [cartItems, setCartItems] = React.useState([]);
+  const [favoriteItems, setFavoriteItems] = React.useState([]);
+  const [loginStatus, setLoginStatus] = React.useState(false)
+  const [items, setItems] = React.useState([]);
+  const [addCardOpened, setAddCardOpened] = React.useState(false);
+  const [editStatus, setEditStatus] = React.useState(false);
+  const [editedState, setEditedState] = React.useState({});
+
+
+
+
+
+  React.useEffect(() =>{
+    const { token } = window.sessionStorage
+    const { tokenExpires } = window.sessionStorage
+    setLoginStatus(token && tokenExpires > Date.now())
+    setupApi(token)
+  }, [])
 
   React.useEffect(() => {
-    async function fetchData() {
-      try {
-        const itemResponse = await axios.get(
-          'https://61451ca338339400175fc52d.mockapi.io/items'
-        );
-        setItems(itemResponse.data);
-        // setIsLoading(false);
-      } catch {
-        // eslint-disable-next-line no-alert
-        alert('Ошибка сервера');
-      }
-    }
-    fetchData();
-    setCartItems(JSON.parse(window.localStorage.getItem('cartItems') || []));
-    setFavoriteItems(
-      JSON.parse(window.localStorage.getItem('favoriteItems') || [])
-    );
+    window.scrollTo(0, 0);
+  },[pathname])
 
 
-console.log(JSON.parse(window.localStorage.getItem('favoriteItems')));
+  const openAddingCard = () => setAddCardOpened(true);
 
-  }, []);
-
-  React.useEffect(() => {
-    window.localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  }, [cartItems]);
-
-  React.useEffect(() => {
-    window.localStorage.setItem('favoriteItems', JSON.stringify(favoriteItems));
-  }, [favoriteItems]);
-
-  const reverseCartItems = item => {
-    if (cartItems.find(obj => obj.id === item.id)) {
-      setCartItems(prev => prev.filter(obj => obj.id !== item.id));
-
-      // setPrice(prev => prev - Number(item.price));
-    } else {
-      setCartItems(prev => [...prev, item]);
-
-      // setPrice(prev => prev + Number(item.price));
-    }
-  };
-
-  const reverseFavoriteItems = item => {
-    if (favoriteItems.find(obj => obj.id === item.id)) {
-      setFavoriteItems(prev => prev.filter(obj => obj.id !== item.id));
-    } else {
-      setFavoriteItems(prev => [...prev, item]);
-    }
-  };
 
   const clearLiked = () => {
     setFavoriteItems([]);
@@ -132,20 +109,33 @@ console.log(JSON.parse(window.localStorage.getItem('favoriteItems')));
     setSearch(any);
   };
 
+
+
+
+
+
   return (
     <ThemeProvider theme={{ fontFamily: 'sans-serif' }}>
       <GlobalStyle />
       <Switch>
         <Context.Provider
           value={{
+            setEditedState,
+            editStatus,
+            setEditStatus,
+            openAddingCard,
             items,
+            setItems,
+            loginStatus,
+            setLoginStatus,
             // isLoading,
-            cartItems,
-            favoriteItems,
+
             search,
             // price,
-            reverseCartItems,
-            reverseFavoriteItems,
+            cartItems,
+            favoriteItems,
+            setCartItems,
+            setFavoriteItems,
             clearLiked,
             clearCart,
             changingInput,
@@ -153,6 +143,7 @@ console.log(JSON.parse(window.localStorage.getItem('favoriteItems')));
             quickSearch,
           }}
         >
+          {addCardOpened && <ModalWindow  editedValue={editedState} addForm closingAddForm={() => setAddCardOpened(false)} />}
           <Route path="/" exact>
             <PageMain />
           </Route>

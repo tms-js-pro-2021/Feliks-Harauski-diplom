@@ -1,7 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import ContentLoader from "react-content-loader";
-import Icons from "../img/MinHeaderIcon";
+import React from 'react';
+import styled from 'styled-components';
+import ContentLoader from 'react-content-loader';
+import Icons from '../img/MinHeaderIcon';
+import Context from './Context';
 
 const ProductCardStyle = styled.div`
   padding: 35px;
@@ -18,6 +19,7 @@ const ProductCardStyle = styled.div`
     line-height: 150%;
     color: #333333;
     margin: 25px 0 10px 0;
+    text-transform: capitalize;
   }
   h5 {
     font-weight: 600;
@@ -80,7 +82,21 @@ const ProductCardImage = styled.div`
   }
 `;
 
-export default function ProductCard({ src, producer, label, price, loading, inCart, inFavorite, onCart, onLiked }) {
+export default function ProductCard({
+  src,
+  producer,
+  label,
+  price,
+  loading,
+  inCart,
+  inFavorite,
+  onCart,
+  onLiked,
+  deleteCard,
+  editCard,
+}) {
+  const productCardContext = React.useContext(Context);
+
   return (
     <>
       {loading ? (
@@ -102,22 +118,40 @@ export default function ProductCard({ src, producer, label, price, loading, inCa
           <ProductCardImage>
             <img src={src} alt={label} />
             <div>
-              <button type="button" onClick={onLiked} href="/">
-                <Icons
-                  name="LikedAdd"
-                  width="35"
-                  height="35"
-                  color={inFavorite ? "red" : "white"}
-                />
-              </button>
-              <button type="button" onClick={onCart} href="/">
-                <Icons
-                  name="CartAdd"
-                  width="35"
-                  height="35"
-                  color={inCart ? "green" : "white"}
-                />
-              </button>
+              {productCardContext.loginStatus ? (
+                <>
+                  <button type="button" onClick={deleteCard} href="/">
+                    <Icons name="Delete" width="35" height="35" color="white" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={editCard}
+                    href="/"
+                  >
+                    <Icons name="Search" width="35" height="35" color="white" />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button type="button" onClick={onLiked} href="/">
+                    <Icons
+                      name="LikedAdd"
+                      width="35"
+                      height="35"
+                      color={inFavorite ? 'red' : 'white'}
+                    />
+                  </button>
+                  <button type="button" onClick={onCart} href="/">
+                    <Icons
+                      name="CartAdd"
+                      width="35"
+                      height="35"
+                      color={inCart ? 'green' : 'white'}
+                    />
+                  </button>
+                </>
+              )}
             </div>
           </ProductCardImage>
           <p>{label}</p>

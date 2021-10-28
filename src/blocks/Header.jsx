@@ -41,27 +41,36 @@ const MinimalHeaderContainer = styled(Wrapper)`
 `;
 
 export default function Header({ minimal }) {
+  const headerContext = React.useContext(Context)
+
   const [cartOpened, setCartOpened] = React.useState(false);
   const [likedOpened, setLikedOpened] = React.useState(false);
+  const [loginOpened, setLoginOpened] = React.useState(false);
+  
 
   const openCart = () => setCartOpened(true);
   const openLiked = () => setLikedOpened(true);
+  const openLogin = () => setLoginOpened(true);
+  
+;
 
-  const headerContext = React.useContext(Context)
+
 
 
   return (
     <>
-      {cartOpened && <ModalWindow closedCart={() => setCartOpened(false)} />}
+      {cartOpened && <ModalWindow cart closedCart={() => setCartOpened(false)} />}
       {likedOpened && <ModalWindow liked closedLiked={() => setLikedOpened(false)} />}
+      {loginOpened && <ModalWindow login closedLogin={() => setLoginOpened(false)} />}
+      
       {minimal ? (
         <MinimalHeaderContainer>
-          <LinkRow openCart={openCart} openLiked={openLiked} />
+          <LinkRow openCart={openCart} openLiked={openLiked} openLogin={openLogin} openAddingCard={headerContext.openAddingCard}/>
         </MinimalHeaderContainer>
       ) : (
         <HeaderContainer>
           <Wrapper>
-            <LinkRow openCart={openCart} openLiked={openLiked} />
+            <LinkRow openCart={openCart} openLiked={openLiked} openLogin={openLogin} openAddingCard={headerContext.openAddingCard}/>
             <Center>
               <h1>Долго, дорого, богато!</h1>
               <Link to="/products">
